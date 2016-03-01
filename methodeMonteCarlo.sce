@@ -8,6 +8,36 @@
 ////////////////////////////////////////////////////////////
 
 
+// VERSOIN MODIFIÉE PAR FABIEN DELHOMME -- PRISE DE NOTE
+
+
+// IDÉE DE BASE
+
+// On fait une grille plus grande que le domaine. Le nombre de case est detérminé par la précision
+
+// On considère que les points qui sont juste avant la fin du domaine représente la frontière.
+// (discètisation)
+
+
+// Pb: comment savoir rapidement si on est dehors, sur la frontière, ou dedans ?
+// Solution: On fait deux matrices, l'une qui va contenir l'évaluation de la fonction f, et l'autre
+// qui va être une matrice booléenne indiquant si on est au bord, à la frontière ou à l'extérieure.
+
+
+// PLAN D'ATTAQUE -- Commun
+
+// Décider d'une nouveaux domaine
+// Etablir une discrétisation correcte du domaine (plus on augmente le nombre de points, plus on se
+// rapproche du vrai domaine )
+// Coder la construction de la grille (les deux matrices). 
+// Lancer l'algorithme.
+
+//Plan d'attaque perso
+
+// Coder la dernière partie de l'algorithme (facile)
+// Faire l'exemple du cercle unité (moyen)
+
+
 function Test = D(x,y)
     // Renvoie :
     // 1 si le point de coordonnées (x,y) est dans le domaine D
@@ -21,7 +51,9 @@ function Test = dD(x,y)
     // 1 si le point de coordonnées (x,y) est sur le bords de D
     // 0 sinon
     Test = 1d0*((x==0 & y>=0 & y<=1) | (y==0 & x>=0 & x<=1) | (x==1 & y>=0 & y<=1) | (y==1 & x>=0 & x<=1))
-endfunction
+endfunction  
+
+// On représente le domaine par un tableau: 
 
 
 function [X,Y]= crea_D(L)
@@ -50,6 +82,11 @@ function [X,Y]= marche_alea(x,y,L)
     Y = y + (1/L)*(test==3) - (1/L)*(test==1)
 endfunction
 
+function tempsArrivee = marcheAle(grilleDomaine)
+    test = grand(1,1,'uin',1,4) // entier aléatoire dans [1,4]
+
+    
+endfunction
 
 function v = Monte_Carlo_point(x,y,L,K,f)
     // méthode de Monte-Carlo appliquée à un point de coordonnées (x,y) où :
