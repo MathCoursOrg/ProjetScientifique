@@ -6,14 +6,11 @@ Le but de ce projet est de résoudre l'équation de Poisson avec la méthode de
 Monte Carlo.
 
 Ce projet est constitué des fichiers suivants:
--         __monteCarlo.sce__: code _Scilab_ qui résout l'équation de poisson à l'aide
+-     __monteCarlo.sce__: code _Scilab_ qui résout l'équation de poisson à l'aide
 d'un algorithme randonisé.
-
 -     __premierCode.sce__: code _Scilab_ illustrant un problème d'arrondi.
-
 -     __presentation.tex__: code _LaTeX_ qui présente la méthode de Monte Carlo, et
 les principaux résultats qui assurent la convergence (en cours)
-
 -     __traitementimg.py__: permet de tracer des domaines à partir d'images !!!
 
 Ce qu'il reste à faire: (par ordre décroissant d'urgence):
