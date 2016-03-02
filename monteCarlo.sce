@@ -32,18 +32,16 @@ clear;
 // Constantes
 
 N = 30; // précision
-K = 10; // nombres de marches aléatoires que l'on effectue par points
+K = 50; // nombres de marches aléatoires que l'on effectue par points
 
 // Cercle = 0
 // Carré = 1
 // Rectangle = 2
 // ...
-ChoixDomaine = 0;
-matValeur = zeros(N,N);
+ChoixDomaine = 3;
 
 // Création de la matrice estDedans
 
-estDedans = zeros(N,N);
 
 // On se donne la grille, le but est de faire la marche aléatoire
 
@@ -64,6 +62,8 @@ estDedans = zeros(N,N);
 
 
 if ChoixDomaine == 0
+    estDedans = zeros(N,N);
+    matValeur = zeros(N,N);
     // C'est un cercle centré 0, de rayon 1
     for i = 1:N
         for j = 1:N
@@ -75,6 +75,8 @@ if ChoixDomaine == 0
 end
 
 if ChoixDomaine == 1
+    estDedans = zeros(N,N);
+    matValeur = zeros(N,N);
  // On fait un carré
   for i = 1:N
     for j = 1:N
@@ -83,10 +85,17 @@ if ChoixDomaine == 1
     end
   end
 end
-        
+
+if ChoixDomaine == 3
+    //On prend le domaine parmi les dessins du dossiers domaine
+    estDedans = fscanfMat("domaines/essaiImage.png.txt")
+    taille = size(estDedans)
+    N = taille(1)
+    matValeur = zeros(N,N)
+end
 
 function z=fonctionBord(x, y)
-    z = 1//Exemple stupide
+    z = x+y//Exemple stupide
 endfunction
 
 function y=valeurTrouveeAuBord(i,j)
@@ -96,7 +105,7 @@ function y=valeurTrouveeAuBord(i,j)
         i = i + (pasAlea==4) - (pasAlea==2); // ? solution au problème d'arrondis : x = int(L*x)/L ?
         j = j + (pasAlea==3) - (pasAlea==1);
     end
-    
+
     // Une fois que l'on est sorti de la boucle, on est à la frontière.
     y = fonctionBord(i,j)
 endfunction
@@ -123,6 +132,3 @@ end
 estDedans
 
 plot3d1(0:1/N:1-1/N, 0:1/N:1-1/N, matValeur)
-
-
-//Avantage: on peut facilement paralléliser, puisque il on construit la solution point par point

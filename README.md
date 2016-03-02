@@ -1,7 +1,6 @@
 # Projet Scientifique
 _Solving Laplace Equation by the method of Monte Carlo._
 
-
 Le but de ce projet est de résoudre l'équation de Poisson avec la méthode de
 Monte Carlo.
 
@@ -12,6 +11,7 @@ d'un algorithme randonisé.
 -     __presentation.tex__: code _LaTeX_ qui présente la méthode de Monte Carlo, et
 les principaux résultats qui assurent la convergence (en cours)
 -     __traitementimg.py__: permet de tracer des domaines à partir d'images !!!
+-     __domaines/__: listes des domaines testés.
 
 Ce qu'il reste à faire: (par ordre décroissant d'urgence):
 -     Faire un graphe log/log pour trouver l'ordre de convergence du schéma (

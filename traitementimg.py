@@ -1,3 +1,4 @@
+#coding:utf-8
 from PIL import Image
 import sys
 
@@ -30,56 +31,20 @@ for y in range(0,N):
     for x in range (0,N):
         if x!= N-1:
             #on est pas à la fin de la ligne donc séparation par virgule
-            if img.getpixel((x,y))=255:
+            if img.getpixel((x,y))==255:
                 #on a un carré noir
-                fichier.write("1,")
+                fichier.write("0 ")
             else:
                 #on a un carré blanc
-                fichier.write("0,")
+                fichier.write("1 ")
         else:
             #on est à la fin de la ligne donc séparation par point-virgule
-            if img.getpixel((x,y))=255:
+            if img.getpixel((x,y))==255:
                 #on a un carré noir
-                fichier.write("1;\n")
+                fichier.write("0\n")
             else:
                 #on a un carré blanc
-                fichier.write("0;\n")   
-            
-            
-            
-            
+                fichier.write("1\n")
+
 fichier.write("];")
 fichier.close()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
