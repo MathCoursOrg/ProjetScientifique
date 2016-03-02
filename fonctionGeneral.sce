@@ -1,3 +1,4 @@
+clear;
 // IDÉE DE BASE
 
 // On fait une grille plus grande que le domaine. Le nombre de case est detérminé par la précision
@@ -30,15 +31,19 @@
 
 // Constantes
 
-N = 100 // précision
-K = 10 // nombres de marches aléatoires que l'on effectue par points
-
-ChoixDomaine = 0
+N = 10; // précision
+K = 10; // nombres de marches aléatoires que l'on effectue par points
 
 // Cercle = 0
 // Carré = 1
 // Rectangle = 2
 // ...
+ChoixDomaine = 0;
+matValeur = zeros(N,N);
+
+// Création de la matrice estDedans
+
+estDedans = zeros(N,N);
 
 // On se donne la grille, le but est de faire la marche aléatoire
 
@@ -57,24 +62,31 @@ ChoixDomaine = 0
 //0 0 0 0 1 1 1 0 0 0 0  |
 //0 0 0 0 0 0 0 0 0 0 0  |
 
-// Création de la matrice estDedans
 
-estDedans = zeros(N,N)
 
-if ChoixDomaine = 0
+if ChoixDomaine == 0
     // C'est un cercle centré 0, de rayon 1
     for i = 1:N
         for j = 1:N
-            if i*i + j*j<=N*N
-                estDedans(i,j)=1
+            if ((i-1/2)/N)**2 + ((j-1/2)/N)**2<=1 // Ceci est un quart de cercle...
+                estDedans(i,j)=1;
             end
         end
     end
 end
 
+//if ChoixDomaine == 1
+  // On fait un carré
+  //for i = 1:N
+    //for j = 1:N
+    //end
+  //end
+//end
+        
+
 function z=fonctionBord(x, y)
     z = x+y //Exemple stupide
-end
+endfunction
 
 function y=creerMatVal(fonctionBord)
 
@@ -83,45 +95,45 @@ function y=creerMatVal(fonctionBord)
     for i = 1:N
         for j = 1:N
             if estDedans(i,j)
-                matVal(i,j)= 1
+                matVal(i,j)= 1;
             end
         end
     end
 
-end
+endfunction
 
-function [I,J]=valeurTrouveeAuBord(i,j)
+function y=valeurTrouveeAuBord(i,j)
 //on se balade dans la grille jusqu'a en sortir ( == toucher une frontière),la valeur de la fonction bord atteint
-    while (estDedans(i,j))
+    while (i <= N & j<= N & i > 0 & j > 0 & estDedans(i,j))
         pasAlea = grand(1,1, 'uin', 1, 4)
-        i = i + (test==4) - (test==2) // ? solution au problème d'arrondis : x = int(L*x)/L ?
-        j = j + (test==3) - (test==1)
+        i = i + (pasAlea==4) - (pasAlea==2); // ? solution au problème d'arrondis : x = int(L*x)/L ?
+        j = j + (pasAlea==3) - (pasAlea==1);
     end
-
-    [I,J] = [i,j]
-end
+    
+    // Une fois que l'on est sorti de la boucle, on est à la frontière.
+    y = fonctionBord(i,j)
+endfunction
 
 // constructionSolLaplacien: Construit la solution du laplacien point par point
 // entrée: les deux matrices qui représente le domaine
 // sortie: la matrice Valeur, matValeur, qui est modifiée
 
-function y=constructionSolLaplacien(matValeur, estDedans)
 
-    // On parcours toutes les cases de la grille, jusqu'a être à l'intérieure du domaine
+// On parcours toutes les cases de la grille, jusqu'a être à l'intérieure du domaine
 
-    i = 0
-    j = 0 //On commence en haut à droite
-    for i = 1:N
-        for j = 1:N
-            if estDedans(i,j)
-                for k = 1:K
-                    matValeur(i,j) = matValeur(i,j) + nbPasAleaSortir(i,j)
-                end
-                matValeur(i,j) = matValeur(i,j)/K
+
+for i = 1:N
+    for j = 1:N
+        if estDedans(i,j)
+            for k = 1:K
+                matValeur(i,j) = matValeur(i,j) + valeurTrouveeAuBord(i,j);
             end
+            matValeur(i,j) = matValeur(i,j)/K;
         end
     end
 end
 
+estDedans
+matValeur
 
 //Avantage: on peut facilement paralléliser, puisque il on construit la solution point par point
