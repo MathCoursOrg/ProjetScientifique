@@ -65,7 +65,7 @@ if ChoixDomaine = 0
     // C'est un cercle centré 0, de rayon 1
     for i = 1:N
         for j = 1:N
-            if i*i + j*j<=1
+            if i*i + j*j<=N*N
                 estDedans(i,j)=1
             end
         end
