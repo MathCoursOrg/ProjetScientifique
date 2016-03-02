@@ -31,7 +31,7 @@ clear;
 
 // Constantes
 
-N = 10; // précision
+N = 30; // précision
 K = 10; // nombres de marches aléatoires que l'on effectue par points
 
 // Cercle = 0
@@ -47,7 +47,6 @@ estDedans = zeros(N,N);
 
 // On se donne la grille, le but est de faire la marche aléatoire
 
-// La grille, c'est deux matrices
 
 //La fonction MatLocal représente le domaine
 
@@ -68,38 +67,26 @@ if ChoixDomaine == 0
     // C'est un cercle centré 0, de rayon 1
     for i = 1:N
         for j = 1:N
-            if ((i-1/2)/N)**2 + ((j-1/2)/N)**2<=1 // Ceci est un quart de cercle...
+            if (i/N)**2 + (j/N)**2<=1 // Ceci est un quart de cercle...
                 estDedans(i,j)=1;
             end
         end
     end
 end
 
-//if ChoixDomaine == 1
-  // On fait un carré
-  //for i = 1:N
-    //for j = 1:N
-    //end
-  //end
-//end
+if ChoixDomaine == 1
+ // On fait un carré
+  for i = 1:N
+    for j = 1:N
+      if max(i/N - 1/2)
+      end
+    end
+  end
+end
         
 
 function z=fonctionBord(x, y)
-    z = x+y //Exemple stupide
-endfunction
-
-function y=creerMatVal(fonctionBord)
-
-    //On parcours la matrice estDedans, et si on tombe sur une frontière, on évalue fonctionBord
-
-    for i = 1:N
-        for j = 1:N
-            if estDedans(i,j)
-                matVal(i,j)= 1;
-            end
-        end
-    end
-
+    z = 1//Exemple stupide
 endfunction
 
 function y=valeurTrouveeAuBord(i,j)
@@ -134,6 +121,8 @@ for i = 1:N
 end
 
 estDedans
-matValeur
+
+plot3d1(0:1/N:1-1/N, 0:1/N:1-1/N, matValeur)
+
 
 //Avantage: on peut facilement paralléliser, puisque il on construit la solution point par point
