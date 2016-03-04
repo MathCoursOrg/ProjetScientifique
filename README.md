@@ -24,6 +24,8 @@ la grille, c'est-à-dire précision de la discrétisation du domaine).
 du schéma et la « bizarre » du domaine.
 -     Peut on jouer sur la symétrie d'un domaine pour mettre en évidence la
 convergence de la solution ?
+-     Vérifier que la solution trouvée est « harmonique», c'est à dire qu'en tout point (x,y),
+la valeur f(x,y) est proche de la moyenne des quatres points voisins. (ou huit ?)
 
 ## Avantages de la méthode de Monte Carlo
 
