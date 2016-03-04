@@ -1,7 +1,7 @@
 # Projet Scientifique
 _Solving Laplace Equation by the method of Monte Carlo._
 
-Le but de ce projet est de résoudre l'équation de Poisson avec la méthode de
+Le but de ce projet est de résoudre l'équation de Laplace avec la méthode de
 Monte Carlo.
 
 Ce projet est constitué des fichiers suivants:
