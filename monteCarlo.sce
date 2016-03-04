@@ -31,8 +31,8 @@ clear;
 
 // Constantes
 
-N = 30; // précision
-K = 50; // nombres de marches aléatoires que l'on effectue par points
+N = 30; // précision, inutile si on prend le domaine à partir d'une image
+K = 70; // nombres de marches aléatoires que l'on effectue par points
 
 // Cercle = 0
 // Carré = 1
@@ -95,18 +95,23 @@ if ChoixDomaine == 3
 end
 
 function z=fonctionBord(x, y)
-    z = x+y//Exemple stupide
+//    if x<y
+//        z =1
+//    else
+//        z = 0
+//    end
+    z = abs(sin(x+y))
 endfunction
 
 function y=valeurTrouveeAuBord(i,j)
 //on se balade dans la grille jusqu'a en sortir ( == toucher une frontière),la valeur de la fonction bord atteint
     while (i <= N & j<= N & i > 0 & j > 0 & estDedans(i,j))
         pasAlea = grand(1,1, 'uin', 1, 4)
-        i = i + (pasAlea==4) - (pasAlea==2); // ? solution au problème d'arrondis : x = int(L*x)/L ?
+        i = i + (pasAlea==4) - (pasAlea==2);
         j = j + (pasAlea==3) - (pasAlea==1);
     end
 
-    // Une fois que l'on est sorti de la boucle, on est à la frontière.
+    // Une fois que l'on est sorti de la boucle, on est à la frontière (ou sur la grille).
     y = fonctionBord(i,j)
 endfunction
 
@@ -117,18 +122,17 @@ endfunction
 
 // On parcours toutes les cases de la grille, jusqu'a être à l'intérieure du domaine
 
-
 for i = 1:N
     for j = 1:N
+        drawlater()
+        clf()
         if estDedans(i,j)
             for k = 1:K
                 matValeur(i,j) = matValeur(i,j) + valeurTrouveeAuBord(i,j);
             end
             matValeur(i,j) = matValeur(i,j)/K;
+            plot3d1(0:1/N:1-1/N, 0:1/N:1-1/N, matValeur)
+            drawnow()
         end
     end
 end
-
-estDedans
-
-plot3d1(0:1/N:1-1/N, 0:1/N:1-1/N, matValeur)
