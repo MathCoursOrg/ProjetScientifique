@@ -1,9 +1,6 @@
-
 /////////////////////////////////////////////////////
 // Methode de Monte Carlo pour l'équation de Laplace
 /////////////////////////////////////////////////////
-
-
 
 
 clear;
@@ -93,7 +90,6 @@ function y=valeurTrouveeAuBord(i,j)
     y = fonctionBord(i,j)
 endfunction
 
-// constructionSolLaplacien: Construit la solution du laplacien point par point
 // entrée: les deux matrices qui représente le domaine
 // sortie: la matrice Valeur, matValeur, qui est modifiée
 
