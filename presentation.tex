@@ -14,6 +14,76 @@
 %\newcommand{\impo}[1]{\emph{#1}}
 %Fin de définition de commandes
 
+\begin{abstract}
+	L'objectif de ce projet est de calculer une solution de l'équation de Laplace à l'aide de la
+	méthode de Monte Carlo.
+\end{abstract}
+
+\section{Présentation de la méthode de Monte Carlo}
+
+La méthode de Monte Carlo s'appuie sur les propriétés de la marche aléatoire. 
+
+\section{Schéma retenu}
+
+\subsection{Discrétisation}
+On commence par discretiser le domaine choisi. On a choisi de quadriller le domaine.  Au début, nous
+avons commencé par utiliser les coordonées des points du plan puis executer la marche aléatoire en
+«sautant» de points en points où la distance entre chaque saut est donnée par $1/N$, où $N$ était un
+paramètre du schéma.  Malheuresement, au fur et à mesure des pas, à cause des erreurs d'arrondi, on
+«sort» de la discrétiasation du domaine. Nous avons donc préféré construire une grille (une matrice)
+qui réprensente les points du domaine, puis effectuer la marche aléatoire dans cette grille. Les
+indices d'une matrice étant entier, il n'y a plus d'erreur d'arrondi possible.
+
+La discrétisation d'effectue donc grâce à une matrice remplie de $1$ ou $0$ pour indiquer
+respectivement si un point se trouve ou non dans le domaine.
+
+\subsection{Marche aléatoire}
+
+Il faut maintenant parcourir tout les points de la grille qui sont à l'intérieure du domaine.
+Pour chaque point du domaine, on lance $K$  marches aléatoires qui commencent en ce point. On fait
+ensuite la moyenne de toutes les valeurs données par la fonction au bord en tout les points à
+l'extérieure du domaine atteint après une marche aléatoire.
+
+
+\subsection{Paramètres du shéma}
+
+\begin{itemize}
+	\item $N$ correspond à la taille de la grille qui discrétise le domaine. Plus ce nombre est
+		élevé, plus la discrétisation est fine.
+	\item $K$ nombre de marche aléatoire effectuée pour chaques points du plan.
+\end{itemize}
+
+\section{Convergence}
+
+Pour analyser la convergence de ce schéma aléatoire nous avons du ??
+
+\section{Avantage de la méthode de Monte carlo}
+
+On voit tout de suite les intêret de cette méthode pour le calcul de la solution de l'équation de
+Laplace:
+\begin{itemize}
+	\item La relative simplicité du schéma: la seule difficulté qui s'est présentée fut de créer
+		une grille pour lancer la marche aléatoire.
+	\item Une parallélisation du calcul possible: la solution est construite point par point
+		(!). En effet, contrairement aux schémas classiques qui calculent la valeur en
+		chaque point en faisant la moyenne des points autour, ce schéma aléatoire peut par
+		exemple calculer la solution en un point précis. On remarque aussi que l'on peut
+		facilement stopper le calcul d'une solution pour le reprendre plus tard: il suffit
+		de faire une moyenne des deux résultats.
+\end{itemize}
+Qui s'accompagne évidemment de désavantages, qui sont néanmoins gérables:
+\begin{itemize}
+	\item Le bon fonctionnement de l'algorithme dépend en pratique d'un bon générateur de
+		hasard. Ce sujet dépasse (de loin) le cadre de ce projet, mais il serait bon de
+		vérifier la qualité du hasard proposée par \emph{Scilab}
+
+	\item La difficulté théorique pour justifier la convergence du schéma: il nous faut en effet
+		les résultats issue de la théorie de la probabilité, et en particulier de la marche
+		aléatoire.
+	\item La convergence qui ne se fait que en $O(\sqrt{N})$. De plus, il est difficile de voir
+		comment améliorer cette convergence. Contrairement aux schémas classiques où il
+		suffit généralement d'un développement de Taylor à l'odre supérieure qui donne un
+		schéma qui converge plus vite (au prix de calcul plus compliqué certe).
+\end{itemize}
 
 \end{document}
-
