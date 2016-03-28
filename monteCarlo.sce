@@ -1,40 +1,10 @@
 clear;
-// IDÉE DE BASE
-
-// On fait une grille plus grande que le domaine. Le nombre de case est detérminé par la précision
-
-// On considère que les points qui sont juste avant la fin du domaine représente la frontière.
-// (discètisation)
-
-
-// Pb: comment savoir rapidement si on est dehors, sur la frontière, ou dedans ?
-// Solution: On fait deux matrices, l'une qui va contenir l'évaluation de la fonction f, et l'autre
-// qui va être une matrice booléenne indiquant si on est au bord, à la frontière ou à l'extérieure.
-
-
-// PLAN D'ATTAQUE -- Commun
-
-// Décider d'une nouveaux domaine
-// Etablir une discrétisation correcte du domaine (plus on augmente le nombre de points, plus on se
-// rapproche du vrai domaine )
-// Coder la construction de la grille (les deux matrices).
-// Lancer l'algorithme.
-
-//Plan d'attaque perso
-
-// Coder la dernière partie de l'algorithme (facile)
-// Faire l'exemple du cercle unité (moyen)
-
-//=============================================================
-
-
-
 // Constantes
 
 N = 20; // précision, inutile si on prend le domaine à partir d'une image
-K = 10; // nombres de marches aléatoires que l'on effectue par points
+K = 30; // nombres de marches aléatoires que l'on effectue par points
 
-ChoixDomaine = 0;
+ChoixDomaine = 3;
 
 // Création de la matrice estDedans
 
@@ -84,7 +54,7 @@ end
 
 if ChoixDomaine == 3
     //On prend le domaine parmi les dessins du dossiers domaine
-    estDedans = fscanfMat("domaines/essaiImage.png.txt")
+    estDedans = fscanfMat("C:\Users\Jean-Yves\Desktop\essai.txt")
     taille = size(estDedans)
     N = taille(1)
     matValeur = zeros(N,N)
@@ -96,7 +66,9 @@ function z=fonctionBord(x, y)
 //    else
 //        z = 0
 //    end
-    z = abs(sin(x+y))
+    x = x/N //Pour pas avoir des valeurs trop grande aux bords
+    y = y/N
+    z = x**2 + y**2
 endfunction
 
 function y=valeurTrouveeAuBord(i,j)
@@ -118,17 +90,21 @@ endfunction
 
 // On parcours toutes les cases de la grille, jusqu'a être à l'intérieure du domaine
 
-drawlater()
-clf()
+
 for i = 1:N
     for j = 1:N
+        //drawlater()
+        //clf()
         if estDedans(i,j)
             for k = 1:K
+
                 matValeur(i,j) = matValeur(i,j) + valeurTrouveeAuBord(i,j);
             end
+
+            //drawnow()
             matValeur(i,j) = matValeur(i,j)/K;
         end
     end
 end
+
 plot3d1(0:1/N:1-1/N, 0:1/N:1-1/N, matValeur)
-drawnow()
