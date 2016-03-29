@@ -1,119 +1,100 @@
-// Test de convergence dans le cas d'une fonction au bord simple (x+y)
-// on fixe le domaine. On va faire varieir le nombre de marche aléatoire.
-
-//Pour optimiser les calculs, l'idée est de faire une moyenne de série de 10 ésultats. POur suivre l'évolution de la construcion de
-//la moyenne de la solution.
-
 clear;
 // Constantes
 
-N = input("Donner le maillage");
-K = input("Nombre de marche aléatoirie par série");
-S = input("Nombre de série");
+K = 5;
+S = 10;
 
-ChoixDomaine = 0; // On fixe le domaine
-iterateur = 1:S; //pour afficher le graphique
-
-if ChoixDomaine == 0
+for N = 10:5:20 //On regarde pour les différentes valeurs de N
     estDedans = zeros(N,N);
     matValeur = zeros(N,N);
-    // C'est un cercle centré 0, de rayon 1
+
+    // On prend ici un cercle centré au milieu du domaine de rayon N/2
     for i = 1:N
         for j = 1:N
-            if (i - N/2)**2 + (j - N/2)**2<=(N/2)**2 // Ceci est un quart de cercle...
+            if (i - N/2)**2 + (j - N/2)**2<=(N/2)**2
                 estDedans(i,j)=1;
             end
         end
     end
-end
 
-function z=fonctionBord(x, y)
-//    if x<y
-//        z =1
-//    else
-//        z = 0
-//    end
-    x = x/N //Pour pas avoir des valeurs trop grandes aux bords
-    y = y/N
-    z = -x - y + 2
-endfunction
+    function z=fonctionBord(x, y)
+        z = (-x - y)/N + 2 // On prend ce plan pour des raisons purement esthétique
+    endfunction
 
-function y=valeurTrouveeAuBord(i,j)
-//on se balade dans la grille jusqu'a en sortir ( == toucher une frontière),la valeur de la fonction bord atteint
-    while (i <= N & j<= N & i > 0 & j > 0 & estDedans(i,j))
-        pasAlea = grand(1,1, 'uin', 1, 4)
-        i = i + (pasAlea==4) - (pasAlea==2);
-        j = j + (pasAlea==3) - (pasAlea==1);
-    end
-
-    // Une fois que l'on est sorti de la boucle, on est à la frontière (ou sur la grille).
-    y = fonctionBord(i,j);
-endfunction
-
-
-//Vecteur qui contient tout les erreurs en fonction du nombre de marche aléatoire
-vecErreur = zeros(1, S);
-// On parcours toutes les cases de la grille, jusqu'a être à l'intérieure du domaine
-
-// On initialise la grille.
-erreurMax = 0;
-for i = 1:N
-    for j = 1:N
-        if estDedans(i,j)
-            matValeur(i,j) = valeurTrouveeAuBord(i,j);
-            e = abs(matValeur(i, j) - fonctionBord(i,j));
-            if e > erreurMax
-                erreurMax = e;
-            end
+    function y=valeurTrouveeAuBord(i,j)
+        while (i <= N & j<= N & i > 0 & j > 0 & estDedans(i,j))
+            pasAlea = grand(1,1, 'uin', 1, 4)
+            i = i + (pasAlea==4) - (pasAlea==2);
+            j = j + (pasAlea==3) - (pasAlea==1);
         end
-    end
-end
-vecErreur(1)=erreurMax;
+        y = fonctionBord(i,j);
+    endfunction
 
-for k = 2:S
+    //Vecteur qui contient tout les erreurs en fonction du nombre de marche aléatoire
+    vecErreur = zeros(1, S);
+
+    // On initialise la grille, et on trouve la première erreur commise.
     erreurMax = 0;
     for i = 1:N
         for j = 1:N
-            if estDedans(i,j)
-                somme = 0;
-                for l = 1:K
-                    somme = somme + valeurTrouveeAuBord(i,j);
-                end
-                matValeur(i,j) = ( somme + k*K*matValeur(i,j) ) / ( ( k + 1 )*K ); // Moyenne pondérée
-                // On prend la norme max.
-                e = abs(matValeur(i, j) - fonctionBord(i,j));// Calcul de l'erreur pour le point (i,j)
+            if estDedans(i,j) //une fois que l'on est dedans
+                matValeur(i,j) = valeurTrouveeAuBord(i,j);
+                e = abs(matValeur(i, j) - fonctionBord(i,j)); //on calcule l'erreur commise par l'approximation
                 if e > erreurMax
-                    erreurMax = e; // On récupère la plus grosse erreur pour avoir la norme max
+                    erreurMax = e;
                 end
             end
         end
     end
-    vecErreur(k)= erreurMax;
+    vecErreur(1)=erreurMax;
 
+    // Ensuite, on calcule toutes les erreurs en fonctions de k qui varie entre 2 et S
+    for k = 2:S
+        erreurMax = 0;
+        for i = 1:N
+            for j = 1:N
+                if estDedans(i,j)
+                    somme = 0;
+                    for l = 1:K
+                        somme = somme + valeurTrouveeAuBord(i,j);
+                    end
+                    matValeur(i,j) = ( somme + k*K*matValeur(i,j) ) / ( ( k + 1 )*K ); // Moyenne pondérée
+                    // Calcul de la différence avec la solution:
+                    //Ici, puisque la fonction au bord est linéaire, la solution attendue est cette même fonction
+                    e = abs(matValeur(i, j) - fonctionBord(i,j));// Calcul de l'erreur pour le point (i,j)
+                    if e > erreurMax
+                        erreurMax = e;
+                        // On prend la norme max.
+                    end
+                end
+            end
+        // Fin du calcul de la k-ieme série.
+        end
+        // On vient de calculer la "distance" entre la solution est l'approximation pour K = 10*k
+        // On met cette donnée dans vecErreur(k)
+        vecErreur(k)= erreurMax;
+    end
 
-    // Fin du calcul de la k-ieme série.
+    // On affiche le tout, et on sauvegarde dans les fichiers qui vont bien
 
-    // Calcul de la différence avec la solution. Ici, puisque la fonction au bord est linéaire, la solution attendue est cette même fonction
+    iterateur = 1:S; //pour afficher le graphique
+    //D'abord la solution en elle même (pour voir si elle ressemble à un plan)
+    scf(1);
+    clf();
+    xtitle("Représentation de la solution approchée", "axe des absicces", "axe des ordonnées", "");
+    plot3d1(0:1/N:1-1/N, 0:1/N:1-1/N, matValeur, theta = 30);
+    xs2png(1,'ResultatsConvergences/ImageK' + string(K) + 'S'+ string(S) + 'N'+string(N)+'.png')
 
-    // On vient de calculer la "distance" entre la solution est l'approximation pour K = 10*k
-    // On met cette donnée dans vecErreur(k)
+    //Ensuite le graphe log/log pour contrôler la convergence
+    scf(2);
+    clf();
+    xtitle('Calcul de la distance entre la solution approchée et la solution exacte en échelle logarithmique', 'Nombre de marche aléatoire', 'Norme infinie entre la solution exacte et approchée');
 
+    //On termine en rajoutant une regression pour connaitre la puissance alpha telle que | solutionApproche - solutionExacte| = O(1/K^alpha)
 
+    [a,b]=reglin(log(K*iterateur), log(vecErreur))
+    plot2d(K*iterateur, vecErreur, logflag="ll");
+    plot2d(K*iterateur, ((K*iterateur).^a), leg=string(a) + "*x", style = -1);
+
+    xs2png(2,'ResultatsConvergences/Convergence_K' + string(K) + '_S'+ string(S) + '_N'+string(N)+'.png')
 end
-scf(1);
-subplot(221);
-clf();
-xtitle("Représentation de la solution approchée", "axe des absicces", "axe des ordonnées", "Valeur de la solution");
-plot3d1(0:1/N:1-1/N, 0:1/N:1-1/N, matValeur, theta = 30);
-xs2png(1,'ResultatsConvergences/ImageK' + string(K) + 'S'+ string(S) + 'N'+string(N)+'.png')
-
-scf(2);
-subplot(222);
-clf();
-xtitle('Calcul de la distance entre la solution approchée et la solution exacte en échelle logarithmique', 'Nombre de marche aléatoire', 'Norme infinie entre la solution exacte et approchée');
-
-[a,b]=reglin(log(K*iterateur), log(vecErreur))
-plot2d(K*iterateur, vecErreur, logflag="ll");
-plot2d(K*iterateur, ((K*iterateur).^a), leg=string(a) + "*x", style = -1);
-
-xs2png(2,'ResultatsConvergences/Convergence_K' + string(K) + '_S'+ string(S) + '_N'+string(N)+'.png')
