@@ -7,9 +7,9 @@
 clear;
 // Constantes
 
-N = 40;
-K = 5; // nombres de marches aléatoires que l'on effectue par points par série.
-S = 10; // Nombre série que l'on va faire.
+N = input("Donner le maillage");
+K = input("Nombre de marche aléatoirie par série");
+S = input("Nombre de série");
 
 ChoixDomaine = 0; // On fixe le domaine
 iterateur = 1:S; //pour afficher le graphique
@@ -20,7 +20,7 @@ if ChoixDomaine == 0
     // C'est un cercle centré 0, de rayon 1
     for i = 1:N
         for j = 1:N
-            if i**2 + j**2<=N*N // Ceci est un quart de cercle...
+            if (i - N/2)**2 + (j - N/2)**2<=(N/2)**2 // Ceci est un quart de cercle...
                 estDedans(i,j)=1;
             end
         end
@@ -35,7 +35,7 @@ function z=fonctionBord(x, y)
 //    end
     x = x/N //Pour pas avoir des valeurs trop grandes aux bords
     y = y/N
-    z = x + y
+    z = -x - y + 2
 endfunction
 
 function y=valeurTrouveeAuBord(i,j)
@@ -79,36 +79,41 @@ for k = 2:S
                 for l = 1:K
                     somme = somme + valeurTrouveeAuBord(i,j);
                 end
-                matValeur(i,j) = ( somme + k*K*matValeur(i,j) )/ ((k+1)*K); //Vive le hacking
-                e = abs(matValeur(i, j) - fonctionBord(i,j));
+                matValeur(i,j) = ( somme + k*K*matValeur(i,j) ) / ( ( k + 1 )*K ); // Moyenne pondérée
+                // On prend la norme max.
+                e = abs(matValeur(i, j) - fonctionBord(i,j));// Calcul de l'erreur pour le point (i,j)
                 if e > erreurMax
-                    erreurMax = e;
+                    erreurMax = e; // On récupère la plus grosse erreur pour avoir la norme max
                 end
             end
         end
     end
     vecErreur(k)= erreurMax;
-    scf(1);
-    subplot(221);
-    clf();
-    xtitle("Représentation de la solution approchée", "axe des absicces", "axe des ordonnées", "Valeur de la solution");
-    plot3d1(0:1/N:1-1/N, 0:1/N:1-1/N, matValeur);
+
 
     // Fin du calcul de la k-ieme série.
 
     // Calcul de la différence avec la solution. Ici, puisque la fonction au bord est linéaire, la solution attendue est cette même fonction
 
-    // On prend la norme max.
-
     // On vient de calculer la "distance" entre la solution est l'approximation pour K = 10*k
     // On met cette donnée dans vecErreur(k)
 
-    scf(2);
-    subplot(222);
-    clf();
-    xtitle('Calcul de la distance entre la solution approchée et la solution exacte en échelle logarithmique', 'Nombre de marche aléatoire', 'Norme infinie entre la solution exacte et approchée');
-    plot2d(K*iterateur, vecErreur, logflag="ll");
+
 end
+scf(1);
+subplot(221);
+clf();
+xtitle("Représentation de la solution approchée", "axe des absicces", "axe des ordonnées", "Valeur de la solution");
+plot3d1(0:1/N:1-1/N, 0:1/N:1-1/N, matValeur, theta = 30);
+xs2png(1,'ResultatsConvergences/ImageK' + string(K) + 'S'+ string(S) + 'N'+string(N)+'.png')
 
+scf(2);
+subplot(222);
+clf();
+xtitle('Calcul de la distance entre la solution approchée et la solution exacte en échelle logarithmique', 'Nombre de marche aléatoire', 'Norme infinie entre la solution exacte et approchée');
 
-disp(reglin(log(K*iterateur), log(vecErreur)), "Résultat de la régression linéaire ")
+[a,b]=reglin(log(K*iterateur), log(vecErreur))
+plot2d(K*iterateur, vecErreur, logflag="ll");
+plot2d(K*iterateur, ((K*iterateur).^a), leg=string(a) + "*x", style = -1);
+
+xs2png(2,'ResultatsConvergences/Convergence_K' + string(K) + '_S'+ string(S) + '_N'+string(N)+'.png')

@@ -6,8 +6,17 @@
 %\usepackage{xcolor}
 \usepackage{amsmath}
 \usepackage{amssymb}
-% Rappel%Pour faire un symbole comme R pour les réels:
-% $\mathbb{R} $
+
+\usepackage{amsthm}  %%%%% ajout 
+
+%%%pour inclure des images
+\usepackage{graphicx}
+%TODO: \graphicspath{ {images/} }
+
+\newtheorem*{theo}{Théorème (Rappel)} %%%%% ajout
+
+
+
 \title{Résolution de l'équation de Laplace, par la méthode de Monte-Carlo}
 \author{Victor \textsc{Schneider}, Christophe \textsc{Riviere}, Fabien \textsc{Delhomme}}
 \begin{document}
@@ -16,13 +25,91 @@
 %Fin de définition de commandes
 \maketitle
 \begin{abstract}
-	L'objectif de ce projet est de calculer une solution de l'équation de Laplace à l'aide de la méthode de Monte-Carlo.
+    L'objectif de ce projet est de calculer une solution de l'équation de Laplace à l'aide de la
+    méthode de Monte-Carlo.
 \end{abstract}
 
 
 \section{Présentation de la méthode de Monte-Carlo}
 
-La méthode de Monte-Carlo s'appuie sur les propriétés de la marche aléatoire.
+\subsection{Introduction}
+
+La méthode de Monte-Carlo est une méthode d'approximation numérique qui s'appuie sur les propriétés
+de la marche aléatoire.
+\smallbreak
+Cette méthode est très utilisée dans les domaines scientifiques nécessitant des approximations
+numériques. Un exemple, lors de l'expérience permettant de mettre en évidence les oscillations des
+neutrinos (en 2001), il était nécessaire de comparer les données énergétiques expérimentales avec
+les valeurs numérique que donnait la théorie, valeurs qu'il a fallu estimer numériquement. On a
+utilisé pour ce faire la méthode de Monte-Carlo.
+
+%TODO changer la taille:
+\begin{figure}
+    \centering \includegraphics[width=10cm]{exMC}
+    \caption{Exemple d'utilisation de la méthode de Monte-Carlo}
+\end{figure}
+
+source : http://arxiv.org/abs/nucl-ex/0110005v1 %TODO: mettre des liens dans les pdf
+
+\subsection{Idée générale de la méthode}
+
+\begin{theo}
+    Théorème de transfert dans le cas d'une loi continue.
+
+    Soit $f : \mathbb{R}^n \rightarrow \mathbb{R}$ la fonction densité associée à la variable
+    aléatoire $X = (X_1, X_2,...,X_n)$.
+
+    Alors\[
+        \mathbb{E} \left( \phi(X_1, ..., X_n) \right) =  \int_{\mathbb{R}^n} \phi(x_1,...,x_n)f(x_1,...,x_n) \, \mathrm{d}x_1...\mathrm{d}x_n.
+    \]
+\end{theo}
+
+Si l'on veut calculer une valeur numérique $A$ bien exprimée, on peut la voir grâce au théorème ci
+-dessus comme une espérance. 
+
+Soit $A$ notre valeur numérique à calculer sur un pavé,
+\[
+  A = \int_{[a,b]^n} \phi(x_1,...,x_n)f(x_1,...,x_n) \, \mathrm{d}x_1...\mathrm{d}x_n.
+\]
+Alors
+\[
+  A = \mathbb{E} \left( \phi(X_1, ..., X_n) \right).
+\]
+où les $X_i$ sont des variables indépendantes suivant toutes la loi uniforme sur $[a,b]$.
+\medbreak
+ L'idée derrière cette méthode est de pouvoir approximer une valeur numérique par une moyenne de
+ marches aléatoires. Le théorème clef qui autorise cette démarche est la loi forte des grands
+ nombres :
+
+\begin{theo}
+     Loi forte des grands nombres.
+
+    Soit $(Y_k)_{k\ge 0}$ une suite de variables aléatoires indépendantes et suivant toutes la même
+    loi, à valeurs dans $\mathbb{R}^n$. On suppose $\mathbb{E}(|Y_1|) < +\infty $. Alors
+
+    \[
+        \frac{Y_1+...+Y_N}{N}\underset{N\to+\infty}{\longrightarrow}\mathbb{E}(Y_1)\; \text{presque sûrement.}
+    \]
+\end{theo}
+
+Autrement dit, si l'on prend un $N$ assez grand, on peut estimer une espérance de manière
+relativement précise. On peut alors estimer notre valeur numérique $A$ "simplement" par une moyenne
+de variable aléatoire. On peut donc utiliser cette méthode pour effectuer un calcul numérique de
+$A$.
+
+\[
+    A \approx \frac{\phi(Y_1)+...+\phi(Y_N)}{N}
+\]
+où tous les $Y_i$ suivent la même loi que $X$ précédemment.
+
+Or numériquement, on sait faire une moyenne, et on sait modéliser des variables aléatoires.
+
+
+
+\subsection{Monte-Carlo appliquée à la résolution d'un problème de Laplace}
+
+Nous allons nous utiliser cette méthode pour établir des solutions numériques à l'équation de Laplace en tout point du domaine.
+
 
 \section{Schéma retenu}
 
@@ -31,9 +118,9 @@ On commence par discrétiser le domaine choisi. On a choisi de quadriller le dom
 avons commencé par utiliser les coordonnées des points du plan puis exécuter la marche aléatoire en
 «sautant» de points en points où la distance entre chaque saut est donnée par $1/N$, où $N$ était un
 paramètre du schéma.  Malheureusement, au fur et à mesure des pas, à cause des erreurs d'arrondi, on
-«sort» de la grille du domaine. Nous avons donc préféré construire une grille (une matrice)
-qui représente les points du domaine, puis effectuer la marche aléatoire dans cette grille. Les
-indices d'une matrice étant entier, il n'y a plus d'erreur d'arrondi possible.
+«sort» de la grille du domaine. Nous avons donc préféré construire une grille (une matrice) qui
+représente les points du domaine, puis effectuer la marche aléatoire dans cette grille. Les indices
+d'une matrice étant entier, il n'y a plus d'erreur d'arrondi possible.
 
 La discrétisation s'effectue donc grâce à une matrice remplie de $1$ ou $0$ pour indiquer
 respectivement si un point se trouve ou non dans le domaine.
