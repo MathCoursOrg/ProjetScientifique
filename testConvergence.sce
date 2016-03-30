@@ -2,9 +2,29 @@ clear;
 // Constantes
 
 K = 5;
-S = 10;
+S = 25;
+compteur = 1;
+debut = 10;
+pas = 10;
+fin = 30;
+autreDonnees = zeros(1, 1 + (fin - debut)/pas);
+temps = zeros(1, 1 + (fin - debut)/pas);
 
-for N = 10:5:20 //On regarde pour les différentes valeurs de N
+function z=fonctionBord(x, y)
+    z = (-x - y)/N + 2 // On prend ce plan pour des raisons purement esthétique
+endfunction
+
+function y=valeurTrouveeAuBord(i,j)
+    while (i <= N & j<= N & i > 0 & j > 0 & estDedans(i,j))
+        pasAlea = grand(1,1, 'uin', 1, 4)
+        i = i + (pasAlea==4) - (pasAlea==2);
+        j = j + (pasAlea==3) - (pasAlea==1);
+    end
+    y = fonctionBord(i,j);
+endfunction
+
+for N = debut:pas:fin //On regarde pour les différentes valeurs de N
+
     estDedans = zeros(N,N);
     matValeur = zeros(N,N);
 
@@ -17,22 +37,10 @@ for N = 10:5:20 //On regarde pour les différentes valeurs de N
         end
     end
 
-    function z=fonctionBord(x, y)
-        z = (-x - y)/N + 2 // On prend ce plan pour des raisons purement esthétique
-    endfunction
-
-    function y=valeurTrouveeAuBord(i,j)
-        while (i <= N & j<= N & i > 0 & j > 0 & estDedans(i,j))
-            pasAlea = grand(1,1, 'uin', 1, 4)
-            i = i + (pasAlea==4) - (pasAlea==2);
-            j = j + (pasAlea==3) - (pasAlea==1);
-        end
-        y = fonctionBord(i,j);
-    endfunction
-
     //Vecteur qui contient tout les erreurs en fonction du nombre de marche aléatoire
     vecErreur = zeros(1, S);
 
+    tic();
     // On initialise la grille, et on trouve la première erreur commise.
     erreurMax = 0;
     for i = 1:N
@@ -75,6 +83,8 @@ for N = 10:5:20 //On regarde pour les différentes valeurs de N
         vecErreur(k)= erreurMax;
     end
 
+    t2 = toc();
+
     // On affiche le tout, et on sauvegarde dans les fichiers qui vont bien
 
     iterateur = 1:S; //pour afficher le graphique
@@ -83,7 +93,7 @@ for N = 10:5:20 //On regarde pour les différentes valeurs de N
     clf();
     xtitle("Représentation de la solution approchée", "axe des absicces", "axe des ordonnées", "");
     plot3d1(0:1/N:1-1/N, 0:1/N:1-1/N, matValeur, theta = 30);
-    xs2png(1,'ResultatsConvergences/ImageK' + string(K) + 'S'+ string(S) + 'N'+string(N)+'.png')
+    xs2png(1,'ResultatsConvergences/ImageK' + string(K) + 'S'+ string(S) + 'N'+string(N)+'.png');
 
     //Ensuite le graphe log/log pour contrôler la convergence
     scf(2);
@@ -92,9 +102,22 @@ for N = 10:5:20 //On regarde pour les différentes valeurs de N
 
     //On termine en rajoutant une regression pour connaitre la puissance alpha telle que | solutionApproche - solutionExacte| = O(1/K^alpha)
 
-    [a,b]=reglin(log(K*iterateur), log(vecErreur))
+    [a,b, sig]=reglin(log(K*iterateur), log(vecErreur));
     plot2d(K*iterateur, vecErreur, logflag="ll");
     plot2d(K*iterateur, ((K*iterateur).^a), leg=string(a) + "*x", style = -1);
 
-    xs2png(2,'ResultatsConvergences/Convergence_K' + string(K) + '_S'+ string(S) + '_N'+string(N)+'.png')
+    xs2png(2,'ResultatsConvergences/Convergence_K' + string(K) + '_S'+ string(S) + '_N'+string(N)+'.png');
+
+    //On met dans un fichier les résultats qui dépendent de N
+
+    autreDonnees(compteur) = a; //On regarde le coefficient de régréssion linéaire en fonction de N.
+    temps(compteur)= t2;
+    compteur = compteur +1;
 end
+
+x = debut:pas:fin;
+unix("rm coefRegFctN");
+unix("rm temp");
+write('coefRegFctN', [x' autreDonnees'], "(F6.3,1X,F6.3)");
+write('temp', [x' temps'], "(F6.3,1X,F6.3)");
+

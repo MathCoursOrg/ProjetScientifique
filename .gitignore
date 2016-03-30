@@ -1,2 +1,9 @@
 *~
 *swp
+*.aux
+*.dvi
+*.fls
+*.log
+*.ps
+*.fdb_latexmk
+essai*
