@@ -7,3 +7,5 @@
 *.ps
 *.fdb_latexmk
 essai*
+*.lof
+*.out
