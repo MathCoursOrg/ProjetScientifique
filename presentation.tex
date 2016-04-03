@@ -58,7 +58,8 @@ utiliser pour ce faire la méthode de Monte-Carlo\footnote{source:
     aléatoire $X = (X_1, X_2,...,X_n)$.
 
     Alors\[ \mathbb{E} \left( \phi(X_1, ..., X_n) \right) =  \int_{\mathbb{R}^n}
-    \phi(x_1,...,x_n)f(x_1,...,x_n) \, \mathrm{d}x_1...\mathrm{d}x_n.  \] \end{theo}
+    \phi(x_1,...,x_n)f(x_1,...,x_n) \, \mathrm{d}x_1...\mathrm{d}x_n.  \] 
+\end{theo}
 
 Si l'on veut calculer une valeur numérique $A$ bien exprimée, on peut la voir grâce au théorème ci
 -dessus comme une espérance.
@@ -76,7 +77,8 @@ loi forte des grands nombres :
     loi, à valeurs dans $\mathbb{R}^n$. On suppose $\mathbb{E}(|Y_1|) < +\infty $. Alors
 
     \[ \frac{Y_1+...+Y_N}{N}\underset{N\to+\infty}{\longrightarrow}\mathbb{E}(Y_1)\; \text{presque
-    sûrement.} \] \end{theo}
+    sûrement.} \]
+\end{theo}
 
 Autrement dit, si l'on prend un $N$ assez grand, on peut estimer une espérance de manière
 relativement précise. On peut alors estimer notre valeur numérique $A$ "simplement" par une moyenne
@@ -190,7 +192,7 @@ On utilise donc la formule suivante pour «fusionner» les deux résultats sur u
 de la grille
 
 \[
-    M_{K+l}(i,j) = \frac{ \sum_{i=K}^{i=K+l} v_i + K*M_{K}(i,j) }{ (K + L) }
+    M_{K+l}(i,j) = \frac{ \sum_{i=K}^{i=K+l} v_i + K*M_{K}(i,j) }{ (K + l) }
 \]
 
 Où les $v_i$ représentent les nouvelles valeurs trouvées lors du lancement des $l$ marches

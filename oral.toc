@@ -1,0 +1,10 @@
+\beamer@endinputifotherversion {3.36pt}
+\select@language {french}
+\beamer@sectionintoc {1}{Introduction \IeC {\`a} la m\IeC {\'e}thode de Monte-Carlo}{2}{0}{1}
+\beamer@sectionintoc {2}{Pr\IeC {\'e}sentation th\IeC {\'e}orique de la m\IeC {\'e}thode de Monte-Carlo}{7}{0}{2}
+\beamer@sectionintoc {3}{Impl\IeC {\'e}mentation de la m\IeC {\'e}thode de Monte-Carlo}{26}{0}{3}
+\beamer@sectionintoc {4}{La valeur trouv\IeC {\'e}e approxime-t-elle la solution de l'\IeC {\'e}quation ?}{33}{0}{4}
+\beamer@subsectionintoc {4}{1}{\IeC {\'E}criture du code, les choix que nous avons faits}{34}{0}{4}
+\beamer@sectionintoc {5}{Pr\IeC {\'e}sentation du programme final}{39}{0}{5}
+\beamer@sectionintoc {6}{Convergence de la m\IeC {\'e}thode de Monte-Carlo}{40}{0}{6}
+\beamer@sectionintoc {7}{Conclusion}{49}{0}{7}
