@@ -8,38 +8,11 @@ Ce projet est constitué des fichiers suivants:
 -     __monteCarlo.sce__: code _Scilab_ qui résout l'équation de poisson à l'aide
 d'un algorithme randonisé.
 -     __premierCode.sce__: code _Scilab_ illustrant un problème d'arrondi.
+-     __testConvergence.sce__ : code _Scilab_ reprenant le code de _monteCarlo.sce_ pour suivre la convergence du schéma.
 -     __presentation.tex__: code _LaTeX_ qui présente la méthode de Monte Carlo, et
 les principaux résultats qui assurent la convergence (en cours)
 -     __traitementimg.py__: permet de tracer des domaines à partir d'images !!!
 -     __domaines/__: listes des domaines testés.
+-     __ResultatConvergence/__: images générées par le programme testConvergence.sce
 
-Ce qu'il reste à faire: (par ordre décroissant d'urgence):
--     Faire un graphe log/log pour trouver l'ordre de convergence du schéma (
-presque surement ?? ). Il faut plusieurs graphes puisque la méthode est
-paramétrée par K (nombre de marches aléatoires) et par N (précision de
-la grille, c'est-à-dire précision de la discrétisation du domaine).
--     Compléter le fichier presentation.tex
--     Ajouter de nouveaux domaines
--     Conclure quant à d'éventuelle corrélation entre la vitesse de convergence
-du schéma et la « bizarre » du domaine.
--     Peut on jouer sur la symétrie d'un domaine pour mettre en évidence la
-convergence de la solution ?
--     Vérifier que la solution trouvée est « harmonique», c'est à dire qu'en tout point (x,y),
-la valeur f(x,y) est proche de la moyenne des quatres points voisins. (ou huit ?)
-
-## Avantages de la méthode de Monte Carlo
-
--     Plutôt facile à mettre en œuvre.
--     Le schéma permet de construire la solution point par point: on peut donc
-paralléliser le processus, soit en divisant le domaine, soit en divisant
-le nombre de marche aléatoire par point, puis faire la moyenne des
-résultats trouvés.
-
-
-## Désavantages (à priori?)
-
--     Convergence non certaine en théorie (??). Quant est-il en pratique ?
--     Temps d'exécution  «aléatoire ».
-
-Il est donc possible d'obtenir n'importe quoi au bout d'un temps très long.
-(Vraiment ?)
+Notre rapport est rédigé dans le fichier __presentation.pdf__.
